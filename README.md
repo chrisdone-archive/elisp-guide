@@ -551,6 +551,15 @@ Real examples of minor modes:
 * [paredit-mode](https://github.com/emacsmirror/paredit/blob/master/paredit.el#L203)
 * [god-mode](https://github.com/chrisdone/god-mode/blob/master/god-mode.el#L80..L86)
 
+## Markers
+
+Markers are handy objects that store a point, and changes to the
+buffer make the marker position move along. See
+[the manual](http://www.gnu.org/software/emacs/manual/html_node/elisp/Markers.html),
+which has a good section explaining it. Their use-case is probably
+more intermediate than for a tutorial like this, so I include them
+only so that you're aware of them.
+
 ## Overlays
 
 See
