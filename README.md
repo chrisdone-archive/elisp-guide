@@ -308,6 +308,25 @@ for details. Rundown:
 * `(region-active-p)` - also handy to know whether the region is
   active.
 
+Here's an command that uses some region functions:
+
+``` lisp
+(defun print-upper-region ()
+  "Demo to print the uppercased version of the active region."
+  (interactive)
+  (when (region-active-p)
+    (message "%S" (let ((string (buffer-substring (region-beginning)
+                                                  (region-end))))
+                    (with-temp-buffer
+                      (insert string)
+                      (upcase-region (point-min)
+                                     (point-max))
+                      (buffer-substring-no-properties (point-min)
+                                                      (point-max)))))))
+```
+
+To run it, `C-M-x` it, select some text and run `M-x print-upper-region`.
+
 ### Text properties
 
 When you manipulate text in Elisp, it can have properties applied to
