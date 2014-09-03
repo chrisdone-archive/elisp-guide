@@ -549,6 +549,7 @@ Real examples of minor modes:
 
 * [structured-haskell-mode](https://github.com/chrisdone/structured-haskell-mode/blob/master/elisp/shm.el#L110)
 * [paredit-mode](https://github.com/emacsmirror/paredit/blob/master/paredit.el#L203)
+* [god-mode](https://github.com/chrisdone/god-mode/blob/master/god-mode.el#L80..L86)
 
 ## Overlays
 
