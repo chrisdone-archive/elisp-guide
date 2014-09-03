@@ -560,6 +560,24 @@ which has a good section explaining it. Their use-case is probably
 more intermediate than for a tutorial like this, so I include them
 only so that you're aware of them.
 
+Here's an example:
+
+``` lisp
+(defun my-indent-region (beg end)
+  (interactive "r")
+  (let ((marker (make-marker)))
+    (set-marker marker (region-end))
+    (goto-char (region-beginning))
+    (while (< (point) marker)
+      (funcall indent-line-function)
+      (forward-line 1))))
+```
+
+You need to store the end of the region before you start changing the
+buffer, because the integer position will increase as you start
+indenting lines. So you store it in a marker and that marker's value
+updates as the buffer's contents changes.
+
 ## Overlays
 
 See
