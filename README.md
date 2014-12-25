@@ -348,7 +348,9 @@ I'll write more about using the debugger stepper and breakpoints later.
 Install and enable
 [paredit](http://www.emacswiki.org/emacs/ParEdit). Nobody sane writes
 Lisp without paredit (or its shiny cousin,
-[smartparens](https://github.com/Fuco1/smartparens)). You will never
+[smartparens](https://github.com/Fuco1/smartparens);
+or its evil twin,
+[lispy](https://github.com/abo-abo/lispy)). You will never
 have unbalanced parentheses, brackets, braces, or strings. Learn to
 accept this and you will enjoy this mode.
 
