@@ -658,3 +658,4 @@ need a `(provide 'foo)` line at the bottom of your file for this to work.
 * http://bzg.fr/learn-emacs-lisp-in-15-minutes.html
 * http://www.delorie.com/gnu/docs/emacs-lisp-intro/emacs-lisp-intro_toc.html
 * http://cjohansen.no/an-introduction-to-elisp
+* http://emacswiki.org/emacs/ElispCookbook
