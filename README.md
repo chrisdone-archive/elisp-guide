@@ -33,8 +33,7 @@ you started making some handy extensions for yourself.
 There are a bunch of existing guides, but they don't strike the right
 balance of useful and helpful. Some just list functions, others try to
 explain Emacs Lisp from the ground up as a language. You don't need to
-know everything right away. See the [Alternative sources](#Alternative
-sources) section for a list of these.
+know everything right away. See the [Alternative sources](#alternative-sources) section for a list of these.
 
 ## Programming in Emacs Lisp
 
