@@ -33,8 +33,8 @@ you started making some handy extensions for yourself.
 There are a bunch of existing guides, but they don't strike the right
 balance of useful and helpful. Some just list functions, others try to
 explain Emacs Lisp from the ground up as a language. You don't need to
-know everything right away. See the [Alternative sources](#Alternative
-sources) section for a list of these.
+know everything right away. See the [Alternative sources](#alternative-sources)
+section for a list of these.
 
 ## Programming in Emacs Lisp
 
@@ -658,3 +658,4 @@ need a `(provide 'foo)` line at the bottom of your file for this to work.
 * http://bzg.fr/learn-emacs-lisp-in-15-minutes.html
 * http://www.delorie.com/gnu/docs/emacs-lisp-intro/emacs-lisp-intro_toc.html
 * http://cjohansen.no/an-introduction-to-elisp
+* http://emacswiki.org/emacs/ElispCookbook
