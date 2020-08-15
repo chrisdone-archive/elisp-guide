@@ -189,86 +189,80 @@ two commands to do lookups:
       The result is a list just as long as SEQUENCE.
       SEQUENCE may be a list, a vector, a bool-vector, or a string.
 
-*** Find all bindings in the current buffer
+*** 查看当前缓冲区所有可用的键绑定
 
-Run `C-h b` to show a massive list of keybindings and the command they
-run. You'll see something like, e.g. in `markdown-mode`:
+键入`C-h b` 以显示大量的键绑定以及其对应的命令。
+ 例如在`markdown-mode`中，你可以看到:
 
     C-c C-x d       markdown-move-down
     C-c C-x l       markdown-promote
     C-c C-x m       markdown-insert-list-item
 
-*** Searching for documentation topics
+*** 查询文档的小技巧
 
-Use the commands called `apropos`.
+调用命令 `apropos`.
 
   * `M-x apropos`
   * `M-x apropos-command`
   * `M-x apropos-library`
   * `M-x apropos-documentation`
 
-*** Jumping to definition
-
-Install this package:
+*** 跳转定义
+	
+安装这个包:
 [[https://github.com/purcell/elisp-slime-nav][elisp-slime-nav]]
 
-Now you can use `M-.` to jump to the identifer at point and `M-,` to
-jump back.
+现在你可以使用 `M-.` 来跳转至标识符所在位置，并且使用`M-,` 可以跳回来.
 
-*** Describe functions
+*** 具有描述功能的函数
 
-The range of `M-x describe-` functions are useful:
+带有 "describe-"部分的函数很有用：
 
-  * `M-x describe-mode` (aka `C-h m`)
+  * `M-x describe-mode` (又称 `C-h m`)
   * `M-x describe-face`
 
   Other ones have been mentioned above as keybindings.
 
-** Basic concepts
-*** Buffers
+** 基础概念
+*** Buffers 缓冲区
 
-All Emacs Lisp code when run has a current buffer. Operations that
-claim to work on "the buffer" work on this current buffer. Some handy
-functions, which you can run `C-h f` on to get more info:
+所有的Emacs代码运行时都会作用于当前缓冲区，声明了在"the buffer"上
+工作的操作都会在当前缓冲区上工作。对于一些有用的函数，你可以使用
+`C-h f`来查看更多信息。
 
-  * `(current-buffer)` - get the current buffer.
-  * `(with-current-buffer buffer-or-name ...)` - temporarily use the given buffer.
-  * `(set-buffer buffer-or-name)` - set the current buffer without
-    switching to it.
-  * `(switch-to-buffer name)` - switch to the buffer visually.
+  * `(current-buffer)` - 获取当前缓冲区.
+  * `(with-current-buffer buffer-or-name ...)` - 使用给定的缓冲区.
+  * `(set-buffer buffer-or-name)` - 设置当前buffer，参量为一个buffer的名字.
+  * `(switch-to-buffer name)` - 可视化切换缓冲区.
 
-  See [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Buffers.html#Buffers][Buffers]] in the manual for detailed info.
+  见文档中的 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Buffers.html#Buffers][Buffers]] 了解更多。
 
-*** Buffer-local variables
+*** Buffer-local variables 缓冲区局部变量
 
-Buffers have local variables, for example:
+缓冲区局部变量，例子：
 
-  * major-mode
+  * major-mode 主模式
 
-  You can use this variable to see what mode you're in, if you need it.
-
-  If you want to set your own buffer-local variable, use this:
-
+  如果需要的话，你可以使用这个变量查看你处于什么模式。
+  
+  如果你想要设置自己的缓冲区局部变量，这样做：
   #+BEGIN_SRC emacs-lisp
-    (defvar your-variable-name nil "Your documentation here.")
+    (defvar your-variable-name nil "变量文档写这里.")
   #+END_SRC
 
-  Then later on in your code that will run in a given buffer, use:
-
+  随后将其运行在指定的缓冲区之上，例如：
   #+BEGIN_SRC emacs-lisp
     (set (make-local-variable 'your-variable-name) <the-value>)
   #+END_SRC
 
-  This is very handy in many scenarios when writing functionality. Note
-  that buffer local variables are reset when you revert the buffer or
-  change modes.
+  这在你编写功能时的多种场景中非常有用，注意当你重载缓冲区(revert buff
+er)或改变模式时，缓冲区局部变量是会重置的，
 
-  See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables][manual]] for details.
+  详情请参考 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables][手册]] 
 
-*** Project-wide buffer-local variables
+*** Project-wide buffer-local variables 项目范围内的缓冲区局部变量
 
-  A handy way to set a buffer local variable for every file that's within a
-  directory structure is to use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html][a `.dir-locals.el` file.]]
+  为目录结构中所有文件设置缓冲区局部变量简便的方法是，使用[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html][一个 `.dir-locals.el` 文件]] 。
 
   #+BEGIN_SRC emacs-lisp
     ((nil . ((indent-tabs-mode . t)
@@ -280,34 +274,32 @@ Buffers have local variables, for example:
                   . "ChangeLog.local"))))))
   #+END_SRC
 
-*** The point
+*** The point 位点
 
-  All Emacs Lisp code has a current point in the current buffer. It's a number.
-  It refers to where the cursor is. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Point.html][the manual entry for point]], but here's
-  the basics:
+  所有Emacs Lisp代码在当前缓冲区都具有一个当前位点，它是一个数字，它是指光标所在
+位置。见[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Point.html][ 手册中位点条目 ]], 以下是一些基本的东西：
 
-  * `(point)` - current point
-  * `(point-max)` - maximum point of the buffer
-  * `(point-min)` - minimum point of the buffer (why is this not just `0`?
-    Because of [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Narrowing.html#Narrowing][narrowing]].
+  * `(point)` - 获取当前位点
+  * `(point-max)` - 获取当前缓冲区最大位点
+  * `(point-min)` - 获取当前缓冲区最小位点（为什么值不总是`0`?)
+    因为 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Narrowing.html#Narrowing][narrowing 变窄]] 的存在.
 
-*** The region
+*** The region 选中的区域
 
-  Sometimes the region can be active, and you can use it in your Emacs Lisp code
-  to manipulate text specially. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Region.html#The-Region][the manual]] for details. Rundown:
+  有时区域可以是激活的，你可以在你的Emacs Lisp代码中使用它来操纵文本。见[[http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Region.html#The-Region][ 手册]]获取详情。
 
-  * `(region-beginning)` - beginning of the region (a point)
-  * `(region-end)` - end of the region (a point)
-  * `(use-region-p)` - whether to try to use region-beginning/region-end
-    for manipulation. Handy for use in commands.
-  * `(region-active-p)` - also handy to know whether the region is
-    active.
+  纲要：
 
-  Here's an command that uses some region functions:
+  * `(region-beginning)` - 返回区域的开始，返回值为一个位点
+  * `(region-end)` - 返回区域的结束，返回值为一个位点
+  * `(use-region-p)` - 如果区域激活并且可以对其操作，返回t。
+  * `(region-active-p)` - 同上，不过有细微差别，请看文档。
+
+  以下是一些使用区域的函数命令：
 
   #+BEGIN_SRC emacs-lisp
     (defun print-upper-region ()
-      "Demo to print the uppercased version of the active region."
+	  "打印激活区域的大写版本，例子"
       (interactive)
       (when (region-active-p)
         (message "%S" (let ((string (buffer-substring (region-beginning)
@@ -320,69 +312,104 @@ Buffers have local variables, for example:
                                                           (point-max)))))))
   #+END_SRC
 
-  To run it, `C-M-x` it, select some text and run `M-x print-upper-region`.
+  要运行它，移动光标至函数内键入`C-M-x`，然后选择一些文本，运行`M-x print-upper-region`
 
-*** Text properties
+*** Text properties 文本属性
 
 When you manipulate text in Elisp, it can have properties applied to it, and
 those properties can be queried. Full details are [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][here]] but see the "Manipulating
 the buffer" section in this guide for examples.
+当你在Elisp中操作文本时，可以对其应用一些属性，并且还能检索这些属性。完整的介绍见
+[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][手册]] 中的"Manipulating the buffer" 小节。
 
-** Debugging
+** 调试器
 
-Run `M-: (setq debug-on-error t) RET` and any errors will open up the
-debugger.
+运行 `M-: (setq debug-on-error t) RET` 随后任何错误都将打开调试器。
 
+#+begin_quote
 I'll write more about using the debugger stepper and breakpoints later.
+#+end_quote
 
-** Editing
-*** Paredit
+作者已弃坑，译者著。
 
-Install and enable [[http://www.emacswiki.org/emacs/ParEdit][paraedit]]. Nobody sane writes Lisp without paredit (or its
-shiny cousin, [[https://github.com/Fuco1/smartparens][smartparens]]; or its evil twin, [[https://github.com/abo-abo/lispy][lispy]]. You will never have
-unbalanced parentheses, brackets, braces, or strings. Learn to accept this and
-you will enjoy this mode.
+** 编辑相关
+*** Paredit插件
 
-As discussed in the discoverability section, use `C-h f paredit-mode
-RET` to see the documentation for this mode.
+立即安装并启用 [[http://www.emacswiki.org/emacs/ParEdit][paraedit]]. 如果没有 paredit/[[https://github.com/Fuco1/smartparens][smartparens]]; 或者 evil 和 [[https://github.com/abo-abo/lispy][lispy]]. 就无法正常编写Lisp. 
+这样就不会有不成对的括号、方括号、花括号或字符串了。学会接受这些你就可以享受这种风格了。
 
-Learn the following helpful keybindings:
+使用在discoverability小节所提到的，使用`C-h f paredit-mode RET`来查看这个模式的文档。
 
-**** Navigating
+了解以下有用的键绑定:
 
-  * `C-M-u` - Go up a node.
-  * `)` - Go to the end of the node or the end of the parent node when repeated.
-  * `C-M-f` - Go to the end of the node.
-  * `C-M-b` - Go to the start of the node.
+**** 导航/移动
 
-  **** Killing
+  * `C-M-u` - 跳转至上一个节点.
+  * `)` - 重复跳转至下一个节点，直到到达父节点末尾.
+  * `C-M-f` - 跳转至结束节点.
+  * `C-M-b` - 跳转至开始节点.
 
-  `C-k` - Kill everything from here to the end of the line, including
-    any following lines that are included in the scope of the nodes
-    being killed. It will also kill inside strings but stop at the end
-    of the string.
+**** Killing 剪切
 
-  **** Raising
+  `C-k` - 剪切所有内容从当前位置到行尾，包含任何软换行的内容。同样也会剪切掉包含的字符串，
+	但是会在字符串末尾停止。
 
-  `M-r` - Replace the parent node by the current node.
+**** Raising 提升
+
+  `M-r` - 替换父节点为当前节点.
 
       (|foo) -> foo
       (foo |bar mu) -> bar
       (foo (bar |mu zot) bob) -> (foo mu bob)
 
-  **** Wrapping
+**** Wrapping 包裹
 
   * `C-M-(` to wrap the following node in parens.
-  * Alternatively, `C-M-SPC` to select the whole node, or just use your
-    normal region selection and run `(` or
-    `[` or `{` to wrap that selection.
+  * 二选一, `C-M-SPC` 选择所有节点, 或者只使用你选中的区域，然后运行`(` 或
+    `[` 或 `{` 来将选择的区域扩起来。
 
-  **** Splitting
+**** Splitting 分割
 
-  * `M-s` to split the current node. This works on parenthesized expressions or strings.
-  * `M-J` to join two nodes. Works same as above in reverse.
+  * `M-s` 分割当前节点，这会为表达式或字符串加上括号。
+  * `M-J` 连接两个节点，同上。
 
-** Manipulating the buffer
+** 操控缓冲区
+
+以下是最常用的:
+
+  * `(insert "foo" "bar")` - 插入文本到当前point(光标)处.
+  * `(delete-region start end)` - 删除区域间的文本.
+  * `(insert-buffer-substring-no-properties buffer start end)` - 在point(光标)之前插入指定缓冲区指定区域的文本(不带文本属性).
+  * `(insert-file-contents <filename>)` - 在point(光标)之后插入指定文件的内容.
+
+  也可以使用Emacs Lisp调用任何其他的插入相关的命令。
+
+*** Text properties 文本属性
+
+要向缓冲区的文本添加属性，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (put-text-property start end 'my-property-name <value>)
+#+END_SRC
+
+要完全重置文本属性，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (set-text-properties start end 'my-property-name <value>)
+#+END_SRC
+
+要从文本中获取属性，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (get-text-property <point> 'my-property-name)
+#+END_SRC
+
+要在字符串被插入缓冲区之前属性化，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (propertize "hello" 'my-property-name <value> 'another-prop <value2>)
+#+END_SRC
+
 ** 缓冲区中移动
 
 以下是最常用的函数:
