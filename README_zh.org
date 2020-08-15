@@ -1,5 +1,5 @@
 * Emacs Lisp Guide
- [[file:README_zh.org][中文版本]]
+  [[file:README_zh.org][中文版本]]
 ** Table of Contents
   * [[*Audience][Audience]]
   * [[*Programming in Emacs Lisp][Programming in Emacs Lisp]] 
@@ -383,7 +383,7 @@ Learn the following helpful keybindings:
   * `M-J` to join two nodes. Works same as above in reverse.
 
 ** Manipulating the buffer
-** 在缓冲区中移动
+** 缓冲区中移动
 
 以下是最常用的函数:
 
@@ -416,48 +416,48 @@ Learn the following helpful keybindings:
 将返回当前行首是否以`X`开头.
 
 类似的函数还有 `save-window-excursion`.
-** 在缓冲区中查询
+** 缓冲区中查询
 
   * `(buffer-substring start end)` - 获取当前buffer中start到end之间的字符串, 并且这些字符串包含了原有的文本属性.
   * `(buffer-substring-no-properties start end)` - 获取当前buffer中start到end之间的字符串, 不包含文本属性.
-  * `(buffer-string)` - return the string of the whole buffer.
-  * `(looking-at "[a-zA-Z]+")` - does text following point match the regex?
-  * `(looking-back "[a-zA-Z]+")` - does text preceding point match the regex?
-** Temporary buffers
+  * `(buffer-string)` - 以字符串形式返回当前buffer的内容.
+  * `(looking-at "[a-zA-Z]+")` - point(光标)后的字符跟参量中的正则表达式匹配么?
+  * `(looking-back "[a-zA-Z]+")` - point(光标)前的字符跟参量中的正则表达式匹配么?
 
-It's often useful to do some work in a temporary buffer so that you
-can use your normal Elisp code to generate a string and some
-properties, for example:
+** 临时缓冲区
+
+在临时缓冲区中做一些事很有用，你可以使用简单的Elisp代码来生成字符串和一些属性，例如:
 
 #+BEGIN_SRC emacs-lisp
   (with-temp-buffer
     (insert "Hello!"))
 #+END_SRC
-** Defining interactive functions
 
-To be able to run a function of your own from a keybinding, it needs
-to be interactive. You need to add `(interactive)` to your `defun`:
+** interactive 定义交互式函数
+
+为了能让函数能被你的快捷键调用，函数需要是交互式的，
+你需要添加`(interactive)`语句到`defun`语句中:
 
 #+BEGIN_SRC emacs-lisp
   (defun foo ()
-    "Some function."
+    "函数文档."
     (interactive)
     (do-some-stuff))
 #+END_SRC
 
-There's a bunch of variations for `INTERACTIVE`, [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Using-Interactive.html][see the manual]].
+可以从手册中了解一堆关于 `INTERACTIVE` 的特殊变量, [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Using-Interactive.html][see the manual]].
 
-Now your function `foo` is interactive, you can use it in a
-keybinding:
+此时，你的函数`foo`是交互式的了，你可以为其绑定键:
 
 #+BEGIN_SRC emacs-lisp
   (define-key emacs-lisp-mode (kbd "C-c C-f") 'foo)
 #+END_SRC
-** Defining your own major mode
 
-You can generally use `define-derived-mode`. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html][the manual on this.]]
+** 创建一个major mode(主模式)
 
-Example:
+通常使用`define-derived-mode`. 见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html][the manual on this.]]
+
+例子:
 
 #+BEGIN_SRC emacs-lisp
   (define-derived-mode hypertext-mode
@@ -469,12 +469,13 @@ Example:
   (define-key hypertext-mode-map
     [down-mouse-3] 'do-hyper-link)
 #+END_SRC
-** Defining a minor mode
 
-Minor modes act as enhancements to existing modes. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Minor-Modes.html][the manual]] about
+** 创建一个minor mode(子模式)
+
+子模式用于增强已有的主模式。见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Minor-Modes.html][the manual]] 关于
 `define-minor-mode`.
 
-A dummy example:
+测试用例:
 
 #+BEGIN_SRC emacs-lisp
   (defvar elisp-guide-mode-map (make-sparse-keymap))
@@ -490,21 +491,21 @@ A dummy example:
     (message "Go!"))
 #+END_SRC
 
-Run `M-x elisp-guide-mode` to activate it and run it again to disable it.
+执行 `M-x elisp-guide-mode` 以激活它 ， 再次运行以关闭它。
 
-Real examples of minor modes:
+实例:
 
   * [[https://github.com/chrisdone/structured-haskell-mode/blob/master/elisp/shm.el#L110][structured-haskell-mode]]
   * [[https://github.com/emacsmirror/paredit/blob/master/paredit.el#L203][paredit-mode]]
   * [[https://github.com/chrisdone/god-mode/blob/master/god-mode.el#L80..L86][god-mode]]
-** Markers
 
-Markers are handy objects that store a point, and changes to the buffer make the
-marker position move along. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Markers.html][the manual]], which has a good section explaining
-it. Their use-case is probably more intermediate than for a tutorial like this,
-so I include them only so that you're aware of them.
+** marker 标记
 
-Here's an example:
+标记可以很方便的存储point(光标)位置， 随着更改缓冲区的操作，标记也会变化。
+见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Markers.html][the manual]], 手册里很好的解释了标记是什么， 手册中的例子相比本教程更加具
+有过渡性，所以作者的教程仅会稍稍涉及。
+
+例子:
 
 #+BEGIN_SRC emacs-lisp
   (defun my-indent-region (beg end)
@@ -521,26 +522,29 @@ You need to store the end of the region before you start changing the
 buffer, because the integer position will increase as you start
 indenting lines. So you store it in a marker and that marker's value
 updates as the buffer's contents changes.
-** Overlays
 
-See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Overlays.html][the manual on overlays]], these are a handy tool for a special kind of text
-that behaves as if separate and above the buffer. This is more advanced, by the
-time you want to use overlays you'll be happy reading the manual entry about it.
-** Standard practices
+在你开始更改缓冲区之前，你需要存储选中区域的结尾，在你开始为当前行缩进时，
+整数位置将会增加。所以你将其存储到marker中，然后在每次缓冲区的内容发生变化
+时，marker的值都会更新。
+** overlays 覆盖层
 
-*** Namespacing
+见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Overlays.html][手册中的overlays]], 对于特殊的文本来说，这是一个很方便的工具，它看起来像独立于缓
+冲区之上的文本。这有些高级，当你想要使用覆盖层时，你将会乐意阅读文档中关于它的条目。
 
-Emacs Lisp doesn't support modules. We go by convention. If your
-module name is `foo`, then name all your top-level bindings by
-prefixing it with `foo-`. Example:
+** Elisp中的约定
+*** 命名空间
 
-    (defun foo-go ()
+Emacs Lisp 不支持模块化。我们可以照葫芦画瓢，如果你的模块名叫做`foo`，
+那么你可以在你的所有顶级绑定名加上前缀`foo-`，例如：
+
+#+begin_src emacs-lisp
+(defun foo-go ()
       "Go!"
        ...)
+(provide 'foo)
+#+end_src    
 
-    (provide 'foo)
-
-To make this easier on your fingers, you can use something like:
+使用以下工具，可以让你少打些字：
 
 #+BEGIN_SRC emacs-lisp
   (defun emacs-lisp-expand-clever ()
@@ -574,15 +578,16 @@ To make this easier on your fingers, you can use something like:
         (symbol-name (symbol-at-point)))))
 #+END_SRC
 
-And then:
+然后:
 
 #+BEGIN_SRC emacs-lisp
   (define-key emacs-lisp-mode-map (kbd "M-/") 'emacs-lisp-expand-clever)
 #+END_SRC
 
-Now you can write `(defun -blah M-/` and get `(defun foo-blah`. You
-need a `(provide 'foo)` line at the bottom of your file for this to work.
-** Alternative sources
+此时你就可以编写`(defun -blah M-/` 随后可以得到`(defun foo-blah)`。你需要
+在文件末行添加`(provide 'foo)`使其正常工作。
+
+** 其他资料
 
   * https://github.com/gar3thjon3s/elisp-cheatsheet/blob/master/cheatsheet.md
   * http://wikemacs.org/wiki/Emacs_Lisp_Cheat_Sheet
