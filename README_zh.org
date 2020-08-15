@@ -399,7 +399,7 @@ Learn the following helpful keybindings:
   * `(search-backward-regexp "blah")` - 同上, 但参数是正则表达式.
   如果你想使用一种在buffer中移动光标的函数，但是却不知道其函数名称的话，可以使用`C-h k`查询到键入的按键所对应的函数。
 
-**☯ Save excursion(保存光标状态)
+*** Save excursion(保存光标状态)
 
 你常常会想执行查询或操纵的操作后将光标返回原本的位置，那么你就可以使用:
 
@@ -418,8 +418,8 @@ Learn the following helpful keybindings:
 类似的函数还有 `save-window-excursion`.
 ** 在缓冲区中查询
 
-  * `(buffer-substring start end)` - 获取start到end之间的字符串, including text properties.
-  * `(buffer-substring-no-properties start end)` - get the string at point, excluding text properties.
+  * `(buffer-substring start end)` - 获取当前buffer中start到end之间的字符串, 并且这些字符串包含了原有的文本属性.
+  * `(buffer-substring-no-properties start end)` - 获取当前buffer中start到end之间的字符串, 不包含文本属性.
   * `(buffer-string)` - return the string of the whole buffer.
   * `(looking-at "[a-zA-Z]+")` - does text following point match the regex?
   * `(looking-back "[a-zA-Z]+")` - does text preceding point match the regex?
@@ -528,7 +528,7 @@ that behaves as if separate and above the buffer. This is more advanced, by the
 time you want to use overlays you'll be happy reading the manual entry about it.
 ** Standard practices
 
-**☯ Namespacing
+*** Namespacing
 
 Emacs Lisp doesn't support modules. We go by convention. If your
 module name is `foo`, then name all your top-level bindings by
