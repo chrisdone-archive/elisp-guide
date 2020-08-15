@@ -154,7 +154,7 @@ A very important thing as an Emacs Lisp programmer is being able to
 get the information you want in a few keystrokes. Here's a list of
 ways to find what you need when you're writing Elisp code.
 
-**☯ Finding functions of keybindings
+*** Finding functions of keybindings
 
 Find the function called by a keybinding: `C-h k`
 
@@ -170,7 +170,7 @@ This will show something like:
 You can click the link `simple.el` to go directly to the definition of
 that function. Very handy indeed.
 
-**☯ Getting documentation
+*** Getting documentation
 
 Functions and variables are distinguished in Emacs Lisp, so there are
 two commands to do lookups:
@@ -189,7 +189,7 @@ two commands to do lookups:
       The result is a list just as long as SEQUENCE.
       SEQUENCE may be a list, a vector, a bool-vector, or a string.
 
-**☯ Find all bindings in the current buffer
+*** Find all bindings in the current buffer
 
 Run `C-h b` to show a massive list of keybindings and the command they
 run. You'll see something like, e.g. in `markdown-mode`:
@@ -198,7 +198,7 @@ run. You'll see something like, e.g. in `markdown-mode`:
     C-c C-x l       markdown-promote
     C-c C-x m       markdown-insert-list-item
 
-**☯ Searching for documentation topics
+*** Searching for documentation topics
 
 Use the commands called `apropos`.
 
@@ -207,7 +207,7 @@ Use the commands called `apropos`.
   * `M-x apropos-library`
   * `M-x apropos-documentation`
 
-**☯ Jumping to definition
+*** Jumping to definition
 
 Install this package:
 [[https://github.com/purcell/elisp-slime-nav][elisp-slime-nav]]
@@ -215,7 +215,7 @@ Install this package:
 Now you can use `M-.` to jump to the identifer at point and `M-,` to
 jump back.
 
-**☯ Describe functions
+*** Describe functions
 
 The range of `M-x describe-` functions are useful:
 
@@ -225,7 +225,7 @@ The range of `M-x describe-` functions are useful:
   Other ones have been mentioned above as keybindings.
 
 ** Basic concepts
-**☯ Buffers
+*** Buffers
 
 All Emacs Lisp code when run has a current buffer. Operations that
 claim to work on "the buffer" work on this current buffer. Some handy
@@ -239,7 +239,7 @@ functions, which you can run `C-h f` on to get more info:
 
   See [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Buffers.html#Buffers][Buffers]] in the manual for detailed info.
 
-**☯ Buffer-local variables
+*** Buffer-local variables
 
 Buffers have local variables, for example:
 
@@ -265,7 +265,7 @@ Buffers have local variables, for example:
 
   See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables][manual]] for details.
 
-**☯ Project-wide buffer-local variables
+*** Project-wide buffer-local variables
 
   A handy way to set a buffer local variable for every file that's within a
   directory structure is to use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html][a `.dir-locals.el` file.]]
@@ -280,7 +280,7 @@ Buffers have local variables, for example:
                   . "ChangeLog.local"))))))
   #+END_SRC
 
-**☯ The point
+*** The point
 
   All Emacs Lisp code has a current point in the current buffer. It's a number.
   It refers to where the cursor is. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Point.html][the manual entry for point]], but here's
@@ -291,7 +291,7 @@ Buffers have local variables, for example:
   * `(point-min)` - minimum point of the buffer (why is this not just `0`?
     Because of [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Narrowing.html#Narrowing][narrowing]].
 
-**☯ The region
+*** The region
 
   Sometimes the region can be active, and you can use it in your Emacs Lisp code
   to manipulate text specially. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Region.html#The-Region][the manual]] for details. Rundown:
@@ -322,7 +322,7 @@ Buffers have local variables, for example:
 
   To run it, `C-M-x` it, select some text and run `M-x print-upper-region`.
 
-**☯ Text properties
+*** Text properties
 
 When you manipulate text in Elisp, it can have properties applied to it, and
 those properties can be queried. Full details are [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][here]] but see the "Manipulating
@@ -336,7 +336,7 @@ debugger.
 I'll write more about using the debugger stepper and breakpoints later.
 
 ** Editing
-**☯ Paredit
+*** Paredit
 
 Install and enable [[http://www.emacswiki.org/emacs/ParEdit][paraedit]]. Nobody sane writes Lisp without paredit (or its
 shiny cousin, [[https://github.com/Fuco1/smartparens][smartparens]]; or its evil twin, [[https://github.com/abo-abo/lispy][lispy]]. You will never have
