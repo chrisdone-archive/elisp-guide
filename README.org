@@ -1,5 +1,5 @@
 * Emacs Lisp Guide
-
+  [[file:README_zh.org][中文版本]]
 ** Table of Contents
   * [[*Audience][Audience]]
   * [[*Programming in Emacs Lisp][Programming in Emacs Lisp]] 

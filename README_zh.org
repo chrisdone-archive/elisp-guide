@@ -1,104 +1,97 @@
 * Emacs Lisp Guide
-  [[file:README_zh.org][中文版本]]
-** Table of Contents
-  * [[*Audience][Audience]]
-  * [[*Programming in Emacs Lisp][Programming in Emacs Lisp]] 
-  * [[*After reading this guide][After reading this guide]] 
-  * [[*Trivial basics][Trivial basics]] 
-  * [[*Evaluation][Evaluation]] 
-  * [[*Discoverability][Discoverability]]
-    * [[*Finding functions of keybindings][Finding functions of keybindings]]
-    * [[*Getting documentation][Getting documentation]]
-    * [[*查看当前缓冲区所有可用的键绑定][查看当前缓冲区所有可用的键绑定]]
-    * [[*查询文档的小技巧][查询文档的小技巧]]
-    * [[*跳转定义][跳转定义]]
-    * [[*具有描述功能的函数][具有描述功能的函数]] 
+
+** 目录
+  * [[#受众][受众]]
+  * [[#使用Emacs-Lisp编程][使用Emacs Lisp编程]]
+  * [[#在读过本文之后][在读过本文之后]]
+  * [[#一些琐碎但必要的基础][一些琐碎但必要的基础]]
+  * [[#求值-Evaluation][求值 Evaluation]]
+  * [[#文档查找][文档查找]]
+    * [[#查找一个键所绑定的函数][查找一个键所绑定的函数]]
+    * [[#获取文档][获取文档]]
+    * [[#查看当前缓冲区所有可用的键绑定][查看当前缓冲区所有可用的键绑定]]
+    * [[#查询文档的小技巧][查询文档的小技巧]]
+    * [[#跳转定义][跳转定义]]
+    * [[#具有描述功能的函数][具有描述功能的函数]]
   * [[#基础概念][基础概念]]
-    * [[#Buffers 缓冲区][Buffers 缓冲区]]
-    * [[#Buffer-local variables 缓冲区局部变量][Buffer-local variables 缓冲区局部变量]]
-    * [[#Project-wide buffer-local variables 项目范围内的缓冲区局部][Project-wide buffer-local variables 项目范围内的缓冲区局部]]
-    * [[#The point 位点][The point 位点]]
-    * [[#The region 选中的区域][The region 选中的区域]]
-    * [[#Text properties 文本属性][Text properties 文本属性]] 
-  * [[#调试器][调试器]] 
+    * [[#Buffers-缓冲区][Buffers 缓冲区]]
+    * [[#Buffer-local-variables-缓冲区局部变量][Buffer-local variables 缓冲区局部变量]]
+    * [[#Project-wide-buffer-local-variables-项目范围内的缓冲区局部][Project-wide buffer-local variables 项目范围内的缓冲区局部]]
+    * [[#The-point-位点][The point 位点]]
+    * [[#The-region-选中的区域][The region 选中的区域]]
+    * [[#Text-properties-文本属性][Text properties 文本属性]]
+  * [[#调试器][调试器]]
   * [[#编辑相关][编辑相关]]
-    * [[#Paredit插件][Paredit插件]] 
-  * [[#操控缓冲区][操控缓冲区]] 
-  * [[#缓冲区中移动][缓冲区中移动]] 
-  * [[#缓冲区中查询][缓冲区中查询]] 
-  * [[#临时缓冲区][临时缓冲区]] 
-  * [[#interactive 定义交互式函数][interactive 定义交互式函数]] 
-  * [[#创建一个majaro mode(主模式)][创建一个majaro mode(主模式)]] 
-  * [[#创建一个minor mode(子模式)][创建一个minor mode(子模式)]] 
-  * [[#Marker 标记][Marker 标记]] 
-  * [[#Overlays 覆盖层][Overlays 覆盖层]] 
+    * [[#Paredit插件][Paredit插件]]
+  * [[#操控缓冲区][操控缓冲区]]
+  * [[#缓冲区中移动][缓冲区中移动]]
+  * [[#缓冲区中查询][缓冲区中查询]]
+  * [[#临时缓冲区][临时缓冲区]]
+  * [[#interactive-定义交互式函数][interactive 定义交互式函数]]
+  * [[#创建一个majaro-mode(主模式)][创建一个majaro mode(主模式)]]
+  * [[#创建一个minor-mode(子模式)][创建一个minor mode(子模式)]]
+  * [[#Marker-标记][Marker 标记]]
+  * [[#Overlays-覆盖层][Overlays 覆盖层]]
   * [[#ELisp中的约定][ELisp中的约定]]
-  * [[#其他资料][其他资料]] 
+  * [[#其他资料][其他资料]]
 
-** Audience
+** 受众
 
-Programmers who are too busy to read through long tutorials and
-manuals, but who want to extend their editor. You don't need to learn
-everything from the ground up, just enough knowledge to be
-self-sufficient. You've been using Emacs for a while and now it's time
-you started making some handy extensions for yourself.
+想要个性化他们的Emacs编辑器，但是忙于阅读冗长的教程和手册的程序员。
+但你并不需要从头学习一切，有一些基本的使用经验、并且写过一些自用的零星配置足矣。
 
-There are a bunch of existing guides, but they don't strike the right
-balance of useful and helpful. Some just list functions, others try to
-explain Emacs Lisp from the ground up as a language. You don't need to
-know everything right away. See the [Alternative sources](#alternative-sources)
-section for a list of these.
+「并且需要有些许的英语阅读能力，以便明白某些代码片段试图表达什么
+  ——译者注」
 
-** Programming in Emacs Lisp
+事实上现在已经有了一堆的入门手册，但是它们并没有在「实际应用」和「帮助理解」两个方面做好平衡。
+它们中的一些只是枯燥的函数堆砌，另一些试图以编程语言的角度从底层解释Emacs Lisp是如何工作的。
+你现在无需知晓一切细节，但你可以在「其他文档」一节中找到这些。
 
-I'm not going to explain the Emacs Lisp language itself in any detail.
-Programming in [[http://en.wikipedia.org/wiki/Emacs_Lisp][Emacs Lisp]] (look at the Wikipedia page for the academic details)
-is similar to programming in Python, Scheme, Common Lisp, JavaScript, Ruby, and
-languages like that. Its syntax is funny but otherwise it's an imperative
-language with similar data structures.
+** 使用Emacs Lisp编程
 
-**One important difference** compared to usual languages to be aware of is that it
-has _dynamic scope_ by default. See [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Dynamic-Binding.html#Dynamic-Binding][Dynamic Binding]] in the manual for the details.
-Almost all Emacs Lisp code you come across today will be using this. [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html#Lexical-Binding][Lexical
-Binding]] has recently been added to Emacs, it will take a while for this to
-permeate.
+本文并不打算详细解释Emacs Lisp本身。
+使用Emacs Lisp[[https://zh.wikipedia.org/wiki/Emacs_Lisp][Emacs Lisp_ZH]] （阅读Wiki百科以了解更多技术细节）
+编程和使用Python、Scheme、Common Lisp、JavaScript、Ruby等其他语言编程类似。
+它的语法很有趣但是从另一个方面来讲它是一种具有相似数据结构的命令式语言。
 
-Like all Lisps, Emacs Lisp has macros which you can [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Macros.html#Macros][read about in the manual at
-your leisure]]
+「中文维基百科内容并不多，建议使用浏览器翻译插件阅读英文维基
+  ——译者注」
 
-** After reading this guide
+Emacs Lisp 与常用语言相比的 /*一个重要区别*/ 是它具有动态作用域。
+具体文档细节详见 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Dynamic-Binding.html#Dynamic-Binding][Dynamic Binding 动态绑定]]以下你接触到的几乎所有Emacs Lisp代码都使用动态作用域。
+而[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html#Lexical-Binding][Lexical-Binding 静态作用域]]最近才被加入到Eamcs中。它需要一些时间来渗透进Emacs内部。
 
-The best, most comprehensive resource on Emacs Lisp is [[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][the manual]]. I will
-reference this manual throughout this guide. I will not repeat what's already
-there. You can reference this manually in a random access fashion when you need
-to solve a problem.
+「静态作用域是在Eamcs 24.1加入的，所以说“最近”。而翻译本文时为2020-Aug
+  ——译者注」
 
-I reference the manual throughout the guide by HTML link, but you can
-read it inside your Emacs itself. Run: `C-h i m Elisp RET`
+像所有的Lisp家族语言一样。Emacs Lisp具有一个宏系统。你可以在闲暇时阅读它。[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Macros.html#Macros][Macros Elisp宏]]
 
-** Trivial basics
+** 在读过本文之后
 
-These are the basics to syntax that you can lookup in any guide or
-just by looking at some Emacs Lisp code. I am assuming you're a
-programmer who can pick things up like this just by looking at code. I
-include these because I use them later:
+关于Emacs Lisp最好的，最全面的文档依然是[[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][Elisp官方文档]]。
+本指南将参考该文档，但不会重复已有的内容。如果你有某些问题需要解决，你可以随时访问它。
+
+该Emacs Lisp文档可通过网页访问，也可通过Emacs内置的手册访问。你可以通过「C-h i m Elisp RET」来打开它。
+
+** 一些琐碎但必要的基础
+
+这些是语法基础，您可以在任何指南中查找，也可以通过一些Eamcs Lisp代码片段来了解。
+在此假设你是一个程序员，通过读一些代码片段就能明白这些。在这里包含这个条目的目的是稍后会用到它们。
 
 #+BEGIN_SRC emacs-lisp
   (* 2 3)
   (concat "a" "b")
   (defun func (arg1 arg2)
-    "Always document your functions."
+    "记得为函数写文档。"
     <function body>)
   (defvar var-name <the value>
-    "Always document your variables.")
+    "记得为变量写文档。")
   (let ((x 1)
         (y 2))
     ...)
 #+END_SRC
 
-In Lisp the normal `LET` doesn't let you refer to previous variables,
-so you need to use `LET*` for that. This is likely to trip people up,
-so I include it here.
+在Lisp中普通的`LET`不能引用之前的变量。所以需要使用`LET*`来引用。这是一个可能会出现的坑，所以需要在这里提到它。
 
 #+BEGIN_SRC emacs-lisp
   (let* ((x 1)
@@ -106,23 +99,23 @@ so I include it here.
     ...)
 #+END_SRC
 
-To do many things at once in one expression, use `PROGN`:
+如果要在一个表达式中使用执行许多操作，使用`PROGN`：
 
 #+BEGIN_SRC emacs-lisp
   (progn do-this
          do-that)
 #+END_SRC
 
-[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Local-Variables.html#Local-Variables][See manual]] for details.
+具体细节[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Local-Variables.html#Local-Variables][见手册]]。
 
-The way to set variables is not obvious:
+设置变量的方式并不显而易见。
 
 #+BEGIN_SRC emacs-lisp
   (setq var-name value)
 
 #+END_SRC
 
-Equality and comparison operators:
+相等和比较运算符：
 
   * `(eq major-mode 'a)`
   * `(= 0 1)`
@@ -130,64 +123,53 @@ Equality and comparison operators:
   * `(string= "a" "b")`
   * `(string> "a" "b")`
 
-  Emacs Lisp has a bunch of equality operators. See [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Equality-Predicates.html][the manual]] for gory details.
+Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Equality-Predicates.html][手册]]
 
-  Data structures available: lists, vectors, rings, hashtables. Look them up in
-  [[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][the manual]].
+以及可用的数据结构：列表、向量、环、哈希表。具体见 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][手册]]。
 
-** Evaluation
+** 求值 Evaluation
 
-  * Use `M-:` to evaluate any Emacs Lisp expression and print the
-    result. I personally use this constantly.
-  * Use `C-x C-e` to evaluate the previous s-expression in the
-    buffer. I personally never use this. See next binding.
-  * Use `C-M-x` to evaluate the current top-level s-expression. I use
-    this to re-apply `defvar` and `defun` declarations.
-  * There is a REPL available by `M-x ielm`. I tend to use `M-:` rather
-    than the REPL but you might like it.
-  * Use `M-x eval-buffer` to evaluate the whole buffer of Emacs Lisp
-    code.
+  * 使用 `M-:` 对一个Emacs Lisp表达式求值并输出结果。我个人经常使用它。
+  * 使用 `C-x C-e` 对buffer中的一个S-表达式（前缀表达式）求值。我个人从不使用。见下一个键绑定。
+  * 使用 `C-M-x` 对当前光标所在位置最外部括号的S表达式求值。我用这个来重新声明`defvar`和`defun`并生效。
+  * `M-x ielm` 提供了一个交互式解释器。我倾向于使用`M-:` 而不是普通的那个。
+  * 使用 `M-x eval-buffer` 对整个buffer中的Emacs Lisp求值。
 
-** Discoverability
+** 文档查找
 
-A very important thing as an Emacs Lisp programmer is being able to
-get the information you want in a few keystrokes. Here's a list of
-ways to find what you need when you're writing Elisp code.
+对于一个Emacs Lisp编程者而言能够在少数的几次击键后得到想要的信息是非常重要的一件事。
+下面列出了在编写Elisp代码时找到所需内容的方法。
 
-*** Finding functions of keybindings
+*** 查找一个键所绑定的函数
 
-Find the function called by a keybinding: `C-h k`
+查找一个快捷键所绑定的函数：`C-h k`
 
-This will show something like:
+这会为你呈现类似这样的信息：
 
-    C-p runs the command previous-line, which is an interactive compiled
-    Lisp function in `simple.el'.
+    C-p 执行命令 previous-line，这是`simple.el`中所编译的一个交互式函数。
 
-    It is bound to C-p.
+	它绑定在 C-p 上
 
     (previous-line &optional ARG TRY-VSCROLL)
 
-You can click the link `simple.el` to go directly to the definition of
-that function. Very handy indeed.
+你可以单击`simple.el`链接来立刻找到这个函数的定义。非常趁手。
 
-*** Getting documentation
+*** 获取文档
 
-Functions and variables are distinguished in Emacs Lisp, so there are
-two commands to do lookups:
+函数和变量在Emacs Lisp中是不同的。所以有两个命令来查找它们：
 
-  * Run `C-h f` to show documentation for a function. This also works
-    for macros.
-  * Run `C-h v` to show documentation for a variable.
+  * 执行 `C-h f` 来显示一个函数的文档。这对宏也可用。
+  * 执行 `C-h v` 来显示一个变量的文档。
 
-  You'll see something like:
+  你会看到这样的信息：
 
-      mapcar is a built-in function in `C source code'.
+      mapcar 是 `C source code' 中的一个内置函数
 
       (mapcar FUNCTION SEQUENCE)
 
-      Apply FUNCTION to each element of SEQUENCE, and make a list of the results.
-      The result is a list just as long as SEQUENCE.
-      SEQUENCE may be a list, a vector, a bool-vector, or a string.
+      将函数应用于「序列」的每一个元素，并给出结果列表。
+      结果是一个和「序列」一样长的列表。
+     「序列」可以是一个列表、一个向量、一个布尔向量或一个字符串。
 
 *** 查看当前缓冲区所有可用的键绑定
 
