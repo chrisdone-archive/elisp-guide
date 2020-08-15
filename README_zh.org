@@ -416,9 +416,9 @@ Learn the following helpful keybindings:
 将返回当前行首是否以`X`开头.
 
 类似的函数还有 `save-window-excursion`.
-** Querying the buffer
+** 在缓冲区中查询
 
-  * `(buffer-substring start end)` - get the string at point, including text properties.
+  * `(buffer-substring start end)` - 获取start到end之间的字符串, including text properties.
   * `(buffer-substring-no-properties start end)` - get the string at point, excluding text properties.
   * `(buffer-string)` - return the string of the whole buffer.
   * `(looking-at "[a-zA-Z]+")` - does text following point match the regex?
