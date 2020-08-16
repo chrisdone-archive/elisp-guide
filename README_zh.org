@@ -50,8 +50,7 @@
 ** 使用Emacs Lisp编程
 
 本文并不打算详细解释Emacs Lisp本身。
-使用Emacs Lisp[[https://zh.wikipedia.org/wiki/Emacs_Lisp][Emacs Lisp_ZH]] （阅读Wiki百科以了解更多技术细节）
-编程和使用Python、Scheme、Common Lisp、JavaScript、Ruby等其他语言编程类似。
+使用Emacs Lisp编程和使用Python、Scheme、Common Lisp、JavaScript、Ruby等其他语言编程类似。[[https://zh.wikipedia.org/wiki/Emacs_Lisp][Emacs Lisp_ZH]] （阅读Wiki百科以了解更多技术细节）
 它的语法很有趣但是从另一个方面来讲它是一种具有相似数据结构的命令式语言。
 
 「中文维基百科内容并不多，建议使用浏览器翻译插件阅读英文维基
@@ -61,8 +60,7 @@ Emacs Lisp 与常用语言相比的 /*一个重要区别*/ 是它具有动态作
 具体文档细节详见 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Dynamic-Binding.html#Dynamic-Binding][Dynamic Binding 动态绑定]]以下你接触到的几乎所有Emacs Lisp代码都使用动态作用域。
 而[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html#Lexical-Binding][Lexical-Binding 静态作用域]]最近才被加入到Eamcs中。它需要一些时间来渗透进Emacs内部。
 
-「静态作用域是在Eamcs 24.1加入的，所以说“最近”。而翻译本文时为2020-Aug
-  ——译者注」
+「静态作用域是在Eamcs 24.1加入的，所以原作者在作此文时说“最近”。而翻译本文时为2020-Aug——译者注」
 
 像所有的Lisp家族语言一样。Emacs Lisp具有一个宏系统。你可以在闲暇时阅读它。[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Macros.html#Macros][Macros Elisp宏]]
 
@@ -194,7 +192,7 @@ Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org
 安装这个包:
 [[https://github.com/purcell/elisp-slime-nav][elisp-slime-nav]]
 
-现在你可以使用 `M-.` 来跳转至标识符所在位置，并且使用`M-,` 可以跳回来.
+现在你可以使用 `M-.` 来跳转至标识符所在位置，并且使用`M-,` 可以跳回来。
 
 *** 具有描述功能的函数
 
@@ -203,7 +201,8 @@ Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org
   * `M-x describe-mode` (又称 `C-h m`)
   * `M-x describe-face`
 
-  Other ones have been mentioned above as keybindings.
+一些其他的函数已经在上面作为快捷键被提到了。
+「指查找函数、快捷键定义等——译者注」
 
 ** 基础概念
 *** Buffers 缓冲区
@@ -212,10 +211,10 @@ Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org
 工作的操作都会在当前缓冲区上工作。对于一些有用的函数，你可以使用
 `C-h f`来查看更多信息。
 
-  * `(current-buffer)` - 获取当前缓冲区.
-  * `(with-current-buffer buffer-or-name ...)` - 使用给定的缓冲区.
-  * `(set-buffer buffer-or-name)` - 设置当前buffer，参量为一个buffer的名字.
-  * `(switch-to-buffer name)` - 可视化切换缓冲区.
+  * `(current-buffer)` - 获取当前缓冲区。
+  * `(with-current-buffer buffer-or-name ...)` - 使用给定的缓冲区。
+  * `(set-buffer buffer-or-name)` - 设置当前buffer，参量为一个buffer的名字。
+  * `(switch-to-buffer name)` - 可视化切换缓冲区。
 
   见文档中的 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Buffers.html#Buffers][Buffers]] 了解更多。
 
@@ -229,7 +228,7 @@ Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org
   
   如果你想要设置自己的缓冲区局部变量，这样做：
   #+BEGIN_SRC emacs-lisp
-    (defvar your-variable-name nil "变量文档写这里.")
+    (defvar your-variable-name nil "变量文档写这里。")
   #+END_SRC
 
   随后将其运行在指定的缓冲区之上，例如：
@@ -237,8 +236,7 @@ Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org
     (set (make-local-variable 'your-variable-name) <the-value>)
   #+END_SRC
 
-  这在你编写功能时的多种场景中非常有用，注意当你重载缓冲区(revert buff
-er)或改变模式时，缓冲区局部变量是会重置的，
+  这在你编写功能时的多种场景中非常有用，注意当你重载缓冲区(revert buffer)或改变模式时，缓冲区局部变量是会重置的。
 
   详情请参考 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables][手册]] 
 
@@ -258,13 +256,13 @@ er)或改变模式时，缓冲区局部变量是会重置的，
 
 *** The point 位点
 
-  所有Emacs Lisp代码在当前缓冲区都具有一个当前位点，它是一个数字，它是指光标所在
-位置。见[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Point.html][ 手册中位点条目 ]], 以下是一些基本的东西：
+  所有Emacs Lisp代码在当前缓冲区都具有一个当前位点，它是一个数字，它是指光标所在的位置。见[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Point.html][ 手册中位点条目 ]]。
+  以下是一些基本的东西：
 
-  * `(point)` - 获取当前位点
-  * `(point-max)` - 获取当前缓冲区最大位点
-  * `(point-min)` - 获取当前缓冲区最小位点（为什么值不总是`0`?)
-    因为 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Narrowing.html#Narrowing][narrowing 变窄]] 的存在.
+  * `(point)` - 获取当前位点。
+  * `(point-max)` - 获取当前缓冲区最大位点。
+  * `(point-min)` - 获取当前缓冲区最小位点（为什么值不总是`0`?)。
+    因为 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Narrowing.html#Narrowing][narrowing 变窄]] 的存在。
 
 *** The region 选中的区域
 
@@ -272,8 +270,8 @@ er)或改变模式时，缓冲区局部变量是会重置的，
 
   纲要：
 
-  * `(region-beginning)` - 返回区域的开始，返回值为一个位点
-  * `(region-end)` - 返回区域的结束，返回值为一个位点
+  * `(region-beginning)` - 返回区域的开始，返回值为一个位点。
+  * `(region-end)` - 返回区域的结束，返回值为一个位点。
   * `(use-region-p)` - 如果区域激活并且可以对其操作，返回t。
   * `(region-active-p)` - 同上，不过有细微差别，请看文档。
 
@@ -302,7 +300,7 @@ When you manipulate text in Elisp, it can have properties applied to it, and
 those properties can be queried. Full details are [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][here]] but see the "Manipulating
 the buffer" section in this guide for examples.
 当你在Elisp中操作文本时，可以对其应用一些属性，并且还能检索这些属性。完整的介绍见
-[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][手册]] 中的"Manipulating the buffer" 小节。
+[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][手册]] 中的“Manipulating the buffer”（操纵缓冲区）小节。
 
 ** 调试器
 
@@ -320,16 +318,16 @@ I'll write more about using the debugger stepper and breakpoints later.
 立即安装并启用 [[http://www.emacswiki.org/emacs/ParEdit][paraedit]]. 如果没有 paredit/[[https://github.com/Fuco1/smartparens][smartparens]]; 或者 evil 和 [[https://github.com/abo-abo/lispy][lispy]]. 就无法正常编写Lisp. 
 这样就不会有不成对的括号、方括号、花括号或字符串了。学会接受这些你就可以享受这种风格了。
 
-使用在discoverability小节所提到的，使用`C-h f paredit-mode RET`来查看这个模式的文档。
+使用在文档查找小节所提到的，使用`C-h f paredit-mode RET`来查看这个模式的文档。
 
 了解以下有用的键绑定:
 
 **** 导航/移动
 
-  * `C-M-u` - 跳转至上一个节点.
-  * `)` - 重复跳转至下一个节点，直到到达父节点末尾.
-  * `C-M-f` - 跳转至结束节点.
-  * `C-M-b` - 跳转至开始节点.
+  * `C-M-u` - 跳转至上一个节点。
+  * `)` - 重复跳转至下一个节点，直到到达父节点末尾。
+  * `C-M-f` - 跳转至结束节点。
+  * `C-M-b` - 跳转至开始节点。
 
 **** Killing 剪切
 
@@ -338,7 +336,7 @@ I'll write more about using the debugger stepper and breakpoints later.
 
 **** Raising 提升
 
-  `M-r` - 替换父节点为当前节点.
+  `M-r` - 替换父节点为当前节点。
 
       (|foo) -> foo
       (foo |bar mu) -> bar
@@ -346,7 +344,7 @@ I'll write more about using the debugger stepper and breakpoints later.
 
 **** Wrapping 包裹
 
-  * `C-M-(` to wrap the following node in parens.
+  * `C-M-(` to wrap the following node in parens。
   * 二选一, `C-M-SPC` 选择所有节点, 或者只使用你选中的区域，然后运行`(` 或
     `[` 或 `{` 来将选择的区域扩起来。
 
@@ -359,10 +357,10 @@ I'll write more about using the debugger stepper and breakpoints later.
 
 以下是最常用的:
 
-  * `(insert "foo" "bar")` - 插入文本到当前point(光标)处.
-  * `(delete-region start end)` - 删除区域间的文本.
-  * `(insert-buffer-substring-no-properties buffer start end)` - 在point(光标)之前插入指定缓冲区指定区域的文本(不带文本属性).
-  * `(insert-file-contents <filename>)` - 在point(光标)之后插入指定文件的内容.
+  * `(insert "foo" "bar")` - 插入文本到当前point(光标)处。
+  * `(delete-region start end)` - 删除区域间的文本。
+  * `(insert-buffer-substring-no-properties buffer start end)` - 在point(光标)之前插入指定缓冲区指定区域的文本(不带文本属性)。
+  * `(insert-file-contents <filename>)` - 在point(光标)之后插入指定文件的内容。
 
   也可以使用Emacs Lisp调用任何其他的插入相关的命令。
 
@@ -396,16 +394,16 @@ I'll write more about using the debugger stepper and breakpoints later.
 
 以下是最常用的函数:
 
-  * `(goto-char <point>)` - 跳转至指定的point位置.
-  * `(forward-char n)` - 向前移动n个字符. 允许接收一个前缀参量.
-  * `(end-of-line)` - 移动point到当前行行尾.
-  * `(beginning-of-line)` - 移动point到当前行行首.
-  * `(skip-chars-forward "regex string")` - 跳转至给定正则表达式所匹配字符的前面.
-  * `(skip-chars-backward "regex string")` - 跳转至给定正则表达式所匹配字符的前面.
-  * `(search-forward "foo")` - 从前开始查找字符串foo，找到后，移动光标到foo的位置.
-  * `(search-backward "foo")` - 从后开始查找字符串foo，找到后，移动光标到foo的位置.
-  * `(search-forward-regexp "blah")` - 同上, 但参数是正则表达式.
-  * `(search-backward-regexp "blah")` - 同上, 但参数是正则表达式.
+  * `(goto-char <point>)` - 跳转至指定的point位置。
+  * `(forward-char n)` - 向前移动n个字符. 允许接收一个前缀参量。
+  * `(end-of-line)` - 移动point到当前行行尾。
+  * `(beginning-of-line)` - 移动point到当前行行首。
+  * `(skip-chars-forward "regex string")` - 跳转至给定正则表达式所匹配字符的前面。
+  * `(skip-chars-backward "regex string")` - 跳转至给定正则表达式所匹配字符的前面。
+  * `(search-forward "foo")` - 从前开始查找字符串foo，找到后，移动光标到foo的位置。
+  * `(search-backward "foo")` - 从后开始查找字符串foo，找到后，移动光标到foo的位置。
+  * `(search-forward-regexp "blah")` - 同上, 但参数是正则表达式。
+  * `(search-backward-regexp "blah")` - 同上, 但参数是正则表达式。
   如果你想使用一种在buffer中移动光标的函数，但是却不知道其函数名称的话，可以使用`C-h k`查询到键入的按键所对应的函数。
 
 *** Save excursion(保存光标状态)
@@ -422,16 +420,16 @@ I'll write more about using the debugger stepper and breakpoints later.
   (save-excursion (beginning-of-line) (looking-at "X"))
 #+END_SRC
 
-将返回当前行首是否以`X`开头.
+将返回当前行首是否以`X`开头。
 
 类似的函数还有 `save-window-excursion`.
 ** 缓冲区中查询
 
-  * `(buffer-substring start end)` - 获取当前buffer中start到end之间的字符串, 并且这些字符串包含了原有的文本属性.
-  * `(buffer-substring-no-properties start end)` - 获取当前buffer中start到end之间的字符串, 不包含文本属性.
-  * `(buffer-string)` - 以字符串形式返回当前buffer的内容.
-  * `(looking-at "[a-zA-Z]+")` - point(光标)后的字符跟参量中的正则表达式匹配么?
-  * `(looking-back "[a-zA-Z]+")` - point(光标)前的字符跟参量中的正则表达式匹配么?
+  * `(buffer-substring start end)` - 获取当前buffer中start到end之间的字符串, 并且这些字符串包含了原有的文本属性。
+  * `(buffer-substring-no-properties start end)` - 获取当前buffer中start到end之间的字符串, 不包含文本属性。
+  * `(buffer-string)` - 以字符串形式返回当前buffer的内容。
+  * `(looking-at "[a-zA-Z]+")` - point(光标)后的字符跟参量中的正则表达式匹配么？
+  * `(looking-back "[a-zA-Z]+")` - point(光标)前的字符跟参量中的正则表达式匹配么？
 
 ** 临时缓冲区
 
@@ -445,7 +443,7 @@ I'll write more about using the debugger stepper and breakpoints later.
 ** interactive 定义交互式函数
 
 为了能让函数能被你的快捷键调用，函数需要是交互式的，
-你需要添加`(interactive)`语句到`defun`语句中:
+你需要添加`(interactive)`语句到`defun`语句中：
 
 #+BEGIN_SRC emacs-lisp
   (defun foo ()
@@ -456,7 +454,7 @@ I'll write more about using the debugger stepper and breakpoints later.
 
 可以从手册中了解一堆关于 `INTERACTIVE` 的特殊变量, [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Using-Interactive.html][see the manual]].
 
-此时，你的函数`foo`是交互式的了，你可以为其绑定键:
+此时，你的函数`foo`是交互式的了，你可以为其绑定键：
 
 #+BEGIN_SRC emacs-lisp
   (define-key emacs-lisp-mode (kbd "C-c C-f") 'foo)
@@ -464,7 +462,7 @@ I'll write more about using the debugger stepper and breakpoints later.
 
 ** 创建一个major mode(主模式)
 
-通常使用`define-derived-mode`. 见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html][the manual on this.]]
+通常使用`define-derived-mode`。 见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html][the manual on this.]]
 
 例子:
 
@@ -526,11 +524,6 @@ I'll write more about using the debugger stepper and breakpoints later.
         (funcall indent-line-function)
         (forward-line 1))))
 #+END_SRC
-
-You need to store the end of the region before you start changing the
-buffer, because the integer position will increase as you start
-indenting lines. So you store it in a marker and that marker's value
-updates as the buffer's contents changes.
 
 在你开始更改缓冲区之前，你需要存储选中区域的结尾，在你开始为当前行缩进时，
 整数位置将会增加。所以你将其存储到marker中，然后在每次缓冲区的内容发生变化
