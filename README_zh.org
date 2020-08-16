@@ -296,9 +296,6 @@ Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org
 
 *** Text properties 文本属性
 
-When you manipulate text in Elisp, it can have properties applied to it, and
-those properties can be queried. Full details are [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][here]] but see the "Manipulating
-the buffer" section in this guide for examples.
 当你在Elisp中操作文本时，可以对其应用一些属性，并且还能检索这些属性。完整的介绍见
 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][手册]] 中的“Manipulating the buffer”（操纵缓冲区）小节。
 
@@ -310,7 +307,8 @@ the buffer" section in this guide for examples.
 I'll write more about using the debugger stepper and breakpoints later.
 #+end_quote
 
-作者已弃坑，译者著。
+「作者已弃坑
+  ——译者注」
 
 ** 编辑相关
 *** Paredit插件
