@@ -648,8 +648,6 @@ need a `(provide 'foo)` line at the bottom of your file for this to work.
 
 ## Alternative sources
 
-* https://github.com/gar3thjon3s/elisp-cheatsheet/blob/master/cheatsheet.md
-* http://wikemacs.org/wiki/Emacs_Lisp_Cheat_Sheet
 * http://steve-yegge.blogspot.it/2008/01/emergency-elisp.html
 * http://lispp.wordpress.com/2009/11/25/emacs-lisp-cheatsheet/
 * http://stackoverflow.com/questions/5238245/elisp-programming-whats-the-best-setup
