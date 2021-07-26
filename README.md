@@ -2,25 +2,49 @@
 
 ### Table of Contents
 
-* [Audience](#audience)
-* [Programming in Emacs Lisp](#programming-in-emacs-lisp)
-* [After reading this guide](#after-reading-this-guide)
-* [Trivial basics](#trivial-basics)
-* [Evaluation](#evaluation)
-* [Discoverability](#discoverability)
-* [Basic concepts](#basic-concepts)
-* [Editing](#editing)
-* [Debugging](#debugging)
-* [Manipulating the buffer](#manipulating-the-buffer)
-* [Navigating the buffer](#navigating-the-buffer)
-* [Querying the buffer](#querying-the-buffer)
-* [Temporary buffers](#temporary-buffers)
-* [Defining interactive functions](#defining-interactive-functions)
-* [Defining your own major mode](#defining-your-own-major-mode)
-* [Defining a minor mode](#defining-a-minor-mode)
-* [Overlays](#overlays)
-* [Standard practices](#standard-practices)
-* [Alternative sources](#alternative-sources)
+- [Emacs Lisp Guide](#emacs-lisp-guide)
+    - [Table of Contents](#table-of-contents)
+  - [Audience](#audience)
+  - [Programming in Emacs Lisp](#programming-in-emacs-lisp)
+  - [After reading this guide](#after-reading-this-guide)
+  - [Trivial basics](#trivial-basics)
+  - [Evaluation](#evaluation)
+  - [Discoverability](#discoverability)
+    - [Finding functions of keybindings](#finding-functions-of-keybindings)
+    - [Getting documentation](#getting-documentation)
+    - [Find all bindings in the current buffer](#find-all-bindings-in-the-current-buffer)
+    - [Searching for documentation topics](#searching-for-documentation-topics)
+    - [Jumping to definition](#jumping-to-definition)
+    - [Describe functions](#describe-functions)
+  - [Basic concepts](#basic-concepts)
+    - [Buffers](#buffers)
+    - [Buffer-local variables](#buffer-local-variables)
+    - [Project-wide buffer-local variables](#project-wide-buffer-local-variables)
+    - [The point](#the-point)
+    - [The region](#the-region)
+    - [Text properties](#text-properties)
+  - [Debugging](#debugging)
+  - [Editing](#editing)
+    - [Paredit](#paredit)
+      - [Navigating](#navigating)
+      - [Killing](#killing)
+      - [Raising](#raising)
+      - [Wrapping](#wrapping)
+      - [Splitting](#splitting)
+  - [Manipulating the buffer](#manipulating-the-buffer)
+    - [Text properties](#text-properties-1)
+  - [Navigating the buffer](#navigating-the-buffer)
+    - [Save excursion](#save-excursion)
+  - [Querying the buffer](#querying-the-buffer)
+  - [Temporary buffers](#temporary-buffers)
+  - [Defining interactive functions](#defining-interactive-functions)
+  - [Defining your own major mode](#defining-your-own-major-mode)
+  - [Defining a minor mode](#defining-a-minor-mode)
+  - [Markers](#markers)
+  - [Overlays](#overlays)
+  - [Standard practices](#standard-practices)
+    - [Namespacing](#namespacing)
+  - [Alternative sources](#alternative-sources)
 
 ## Audience
 
@@ -648,8 +672,6 @@ need a `(provide 'foo)` line at the bottom of your file for this to work.
 
 ## Alternative sources
 
-* https://github.com/gar3thjon3s/elisp-cheatsheet/blob/master/cheatsheet.md
-* http://wikemacs.org/wiki/Emacs_Lisp_Cheat_Sheet
 * http://steve-yegge.blogspot.it/2008/01/emergency-elisp.html
 * http://lispp.wordpress.com/2009/11/25/emacs-lisp-cheatsheet/
 * http://stackoverflow.com/questions/5238245/elisp-programming-whats-the-best-setup
@@ -661,3 +683,4 @@ need a `(provide 'foo)` line at the bottom of your file for this to work.
 * http://www.delorie.com/gnu/docs/emacs-lisp-intro/emacs-lisp-intro_toc.html
 * http://cjohansen.no/an-introduction-to-elisp
 * http://emacswiki.org/emacs/ElispCookbook
+* [Emacs cheah sheet](https://web.archive.org/web/20150525182115/http://wikemacs.org/wiki/Emacs_Lisp_Cheat_Sheet)
