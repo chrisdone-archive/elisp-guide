@@ -1,0 +1,604 @@
+* Emacs Lisp Guide
+
+** 目录
+  * [[#受众][受众]]
+  * [[#使用Emacs-Lisp编程][使用Emacs Lisp编程]]
+  * [[#在读过本文之后][在读过本文之后]]
+  * [[#一些琐碎但必要的基础][一些琐碎但必要的基础]]
+  * [[#求值-Evaluation][求值 Evaluation]]
+  * [[#文档查找][文档查找]]
+    * [[#查找一个键所绑定的函数][查找一个键所绑定的函数]]
+    * [[#获取文档][获取文档]]
+    * [[#查看当前缓冲区所有可用的键绑定][查看当前缓冲区所有可用的键绑定]]
+    * [[#查询文档的小技巧][查询文档的小技巧]]
+    * [[#跳转定义][跳转定义]]
+    * [[#具有描述功能的函数][具有描述功能的函数]]
+  * [[#基础概念][基础概念]]
+    * [[#Buffers-缓冲区][Buffers 缓冲区]]
+    * [[#Buffer-local-variables-缓冲区局部变量][Buffer-local variables 缓冲区局部变量]]
+    * [[#Project-wide-buffer-local-variables-项目范围内的缓冲区局部][Project-wide buffer-local variables 项目范围内的缓冲区局部]]
+    * [[#The-point-位点][The point 位点]]
+    * [[#The-region-选中的区域][The region 选中的区域]]
+    * [[#Text-properties-文本属性][Text properties 文本属性]]
+  * [[#调试器][调试器]]
+  * [[#编辑相关][编辑相关]]
+    * [[#Paredit插件][Paredit插件]]
+  * [[#操控缓冲区][操控缓冲区]]
+  * [[#缓冲区中移动][缓冲区中移动]]
+  * [[#缓冲区中查询][缓冲区中查询]]
+  * [[#临时缓冲区][临时缓冲区]]
+  * [[#interactive-定义交互式函数][interactive 定义交互式函数]]
+  * [[#创建一个majaro-mode(主模式)][创建一个majaro mode(主模式)]]
+  * [[#创建一个minor-mode(子模式)][创建一个minor mode(子模式)]]
+  * [[#Marker-标记][Marker 标记]]
+  * [[#Overlays-覆盖层][Overlays 覆盖层]]
+  * [[#ELisp中的约定][ELisp中的约定]]
+  * [[#其他资料][其他资料]]
+
+** 受众
+
+想要个性化他们的Emacs编辑器，但是忙于阅读冗长的教程和手册的程序员。
+但你并不需要从头学习一切，有一些基本的使用经验、并且写过一些自用的零星配置足矣。
+
+「并且需要有些许的英语阅读能力，以便明白某些代码片段试图表达什么
+  ——译者注」
+
+事实上现在已经有了一堆的入门手册，但是它们并没有在「实际应用」和「帮助理解」两个方面做好平衡。
+它们中的一些只是枯燥的函数堆砌，另一些试图以编程语言的角度从底层解释Emacs Lisp是如何工作的。
+你现在无需知晓一切细节，但你可以在「其他文档」一节中找到这些。
+
+** 使用Emacs Lisp编程
+
+本文并不打算详细解释Emacs Lisp本身。
+使用Emacs Lisp编程和使用Python、Scheme、Common Lisp、JavaScript、Ruby等其他语言编程类似。[[https://zh.wikipedia.org/wiki/Emacs_Lisp][Emacs Lisp_ZH]] （阅读Wiki百科以了解更多技术细节）
+它的语法很有趣但是从另一个方面来讲它是一种具有相似数据结构的命令式语言。
+
+「中文维基百科内容并不多，建议使用浏览器翻译插件阅读英文维基
+  ——译者注」
+
+Emacs Lisp 与常用语言相比的 /*一个重要区别*/ 是它具有动态作用域。
+具体文档细节详见 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Dynamic-Binding.html#Dynamic-Binding][Dynamic Binding 动态绑定]]以下你接触到的几乎所有Emacs Lisp代码都使用动态作用域。
+而[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html#Lexical-Binding][Lexical-Binding 静态作用域]]最近才被加入到Eamcs中。它需要一些时间来渗透进Emacs内部。
+
+「静态作用域是在Eamcs 24.1加入的，所以原作者在作此文时说“最近”。而翻译本文时为2020-Aug——译者注」
+
+像所有的Lisp家族语言一样。Emacs Lisp具有一个宏系统。你可以在闲暇时阅读它。[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Macros.html#Macros][Macros Elisp宏]]
+
+** 在读过本文之后
+
+关于Emacs Lisp最好的，最全面的文档依然是[[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][Elisp官方文档]]。
+本指南将参考该文档，但不会重复已有的内容。如果你有某些问题需要解决，你可以随时访问它。
+
+该Emacs Lisp文档可通过网页访问，也可通过Emacs内置的手册访问。你可以通过「C-h i m Elisp RET」来打开它。
+
+** 一些琐碎但必要的基础
+
+这些是语法基础，您可以在任何指南中查找，也可以通过一些Eamcs Lisp代码片段来了解。
+在此假设你是一个程序员，通过读一些代码片段就能明白这些。在这里包含这个条目的目的是稍后会用到它们。
+
+#+BEGIN_SRC emacs-lisp
+  (* 2 3)
+  (concat "a" "b")
+  (defun func (arg1 arg2)
+    "记得为函数写文档。"
+    <function body>)
+  (defvar var-name <the value>
+    "记得为变量写文档。")
+  (let ((x 1)
+        (y 2))
+    ...)
+#+END_SRC
+
+在Lisp中普通的`LET`不能引用之前的变量。所以需要使用`LET*`来引用。这是一个可能会出现的坑，所以需要在这里提到它。
+
+#+BEGIN_SRC emacs-lisp
+  (let* ((x 1)
+         (y x))
+    ...)
+#+END_SRC
+
+如果要在一个表达式中使用执行许多操作，使用`PROGN`：
+
+#+BEGIN_SRC emacs-lisp
+  (progn do-this
+         do-that)
+#+END_SRC
+
+具体细节[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Local-Variables.html#Local-Variables][见手册]]。
+
+设置变量的方式并不显而易见。
+
+#+BEGIN_SRC emacs-lisp
+  (setq var-name value)
+
+#+END_SRC
+
+相等和比较运算符：
+
+  * `(eq major-mode 'a)`
+  * `(= 0 1)`
+  * `(> 0 1)`
+  * `(string= "a" "b")`
+  * `(string> "a" "b")`
+
+Emacs Lisp 有一大堆的相等运算符，具体细节见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Equality-Predicates.html][手册]]
+
+以及可用的数据结构：列表、向量、环、哈希表。具体见 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][手册]]。
+
+** 求值 Evaluation
+
+  * 使用 `M-:` 对一个Emacs Lisp表达式求值并输出结果。我个人经常使用它。
+  * 使用 `C-x C-e` 对buffer中的一个S-表达式（前缀表达式）求值。我个人从不使用。见下一个键绑定。
+  * 使用 `C-M-x` 对当前光标所在位置最外部括号的S表达式求值。我用这个来重新声明`defvar`和`defun`并生效。
+  * `M-x ielm` 提供了一个交互式解释器。我倾向于使用`M-:` 而不是普通的那个。
+  * 使用 `M-x eval-buffer` 对整个buffer中的Emacs Lisp求值。
+
+** 文档查找
+
+对于一个Emacs Lisp编程者而言能够在少数的几次击键后得到想要的信息是非常重要的一件事。
+下面列出了在编写Elisp代码时找到所需内容的方法。
+
+*** 查找一个键所绑定的函数
+
+查找一个快捷键所绑定的函数：`C-h k`
+
+这会为你呈现类似这样的信息：
+
+    C-p 执行命令 previous-line，这是`simple.el`中所编译的一个交互式函数。
+
+	它绑定在 C-p 上
+
+    (previous-line &optional ARG TRY-VSCROLL)
+
+你可以单击`simple.el`链接来立刻找到这个函数的定义。非常趁手。
+
+*** 获取文档
+
+函数和变量在Emacs Lisp中是不同的。所以有两个命令来查找它们：
+
+  * 执行 `C-h f` 来显示一个函数的文档。这对宏也可用。
+  * 执行 `C-h v` 来显示一个变量的文档。
+
+  你会看到这样的信息：
+
+      mapcar 是 `C source code' 中的一个内置函数
+
+      (mapcar FUNCTION SEQUENCE)
+
+      将函数应用于「序列」的每一个元素，并给出结果列表。
+      结果是一个和「序列」一样长的列表。
+     「序列」可以是一个列表、一个向量、一个布尔向量或一个字符串。
+
+*** 查看当前缓冲区所有可用的键绑定
+
+键入`C-h b` 以显示大量的键绑定以及其对应的命令。
+ 例如在`markdown-mode`中，你可以看到:
+
+    C-c C-x d       markdown-move-down
+    C-c C-x l       markdown-promote
+    C-c C-x m       markdown-insert-list-item
+
+*** 查询文档的小技巧
+
+调用命令 `apropos`.
+
+  * `M-x apropos`
+  * `M-x apropos-command`
+  * `M-x apropos-library`
+  * `M-x apropos-documentation`
+
+*** 跳转定义
+	
+安装这个包:
+[[https://github.com/purcell/elisp-slime-nav][elisp-slime-nav]]
+
+现在你可以使用 `M-.` 来跳转至标识符所在位置，并且使用`M-,` 可以跳回来。
+
+*** 具有描述功能的函数
+
+带有 "describe-"部分的函数很有用：
+
+  * `M-x describe-mode` (又称 `C-h m`)
+  * `M-x describe-face`
+
+一些其他的函数已经在上面作为快捷键被提到了。
+「指查找函数、快捷键定义等——译者注」
+
+** 基础概念
+*** Buffers 缓冲区
+
+所有的Emacs代码运行时都会作用于当前缓冲区，声明了在"the buffer"上
+工作的操作都会在当前缓冲区上工作。对于一些有用的函数，你可以使用
+`C-h f`来查看更多信息。
+
+  * `(current-buffer)` - 获取当前缓冲区。
+  * `(with-current-buffer buffer-or-name ...)` - 使用给定的缓冲区。
+  * `(set-buffer buffer-or-name)` - 设置当前buffer，参量为一个buffer的名字。
+  * `(switch-to-buffer name)` - 可视化切换缓冲区。
+
+  见文档中的 [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Buffers.html#Buffers][Buffers]] 了解更多。
+
+*** Buffer-local variables 缓冲区局部变量
+
+缓冲区局部变量，例子：
+
+  * major-mode 主模式
+
+  如果需要的话，你可以使用这个变量查看你处于什么模式。
+  
+  如果你想要设置自己的缓冲区局部变量，这样做：
+  #+BEGIN_SRC emacs-lisp
+    (defvar your-variable-name nil "变量文档写这里。")
+  #+END_SRC
+
+  随后将其运行在指定的缓冲区之上，例如：
+  #+BEGIN_SRC emacs-lisp
+    (set (make-local-variable 'your-variable-name) <the-value>)
+  #+END_SRC
+
+  这在你编写功能时的多种场景中非常有用，注意当你重载缓冲区(revert buffer)或改变模式时，缓冲区局部变量是会重置的。
+
+  详情请参考 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables][手册]] 
+
+*** Project-wide buffer-local variables 项目范围内的缓冲区局部变量
+
+  为目录结构中所有文件设置缓冲区局部变量简便的方法是，使用[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html][一个 `.dir-locals.el` 文件]] 。
+
+  #+BEGIN_SRC emacs-lisp
+    ((nil . ((indent-tabs-mode . t)
+             (fill-column . 80)))
+     (c-mode . ((c-file-style . "BSD")
+                (subdirs . nil)))
+     ("src/imported"
+      . ((nil . ((change-log-default-name
+                  . "ChangeLog.local"))))))
+  #+END_SRC
+
+*** The point 位点
+
+  所有Emacs Lisp代码在当前缓冲区都具有一个当前位点，它是一个数字，它是指光标所在的位置。见[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Point.html][ 手册中位点条目 ]]。
+  以下是一些基本的东西：
+
+  * `(point)` - 获取当前位点。
+  * `(point-max)` - 获取当前缓冲区最大位点。
+  * `(point-min)` - 获取当前缓冲区最小位点（为什么值不总是`0`?)。
+    因为 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Narrowing.html#Narrowing][narrowing 变窄]] 的存在。
+
+*** The region 选中的区域
+
+  有时区域可以是激活的，你可以在你的Emacs Lisp代码中使用它来操纵文本。见[[http://www.gnu.org/software/emacs/manual/html_node/elisp/The-Region.html#The-Region][ 手册]]获取详情。
+
+  纲要：
+
+  * `(region-beginning)` - 返回区域的开始，返回值为一个位点。
+  * `(region-end)` - 返回区域的结束，返回值为一个位点。
+  * `(use-region-p)` - 如果区域激活并且可以对其操作，返回t。
+  * `(region-active-p)` - 同上，不过有细微差别，请看文档。
+
+  以下是一些使用区域的函数命令：
+
+  #+BEGIN_SRC emacs-lisp
+    (defun print-upper-region ()
+	  "打印激活区域的大写版本，例子"
+      (interactive)
+      (when (region-active-p)
+        (message "%S" (let ((string (buffer-substring (region-beginning)
+                                                      (region-end))))
+                        (with-temp-buffer
+                          (insert string)
+                          (upcase-region (point-min)
+                                         (point-max))
+                          (buffer-substring-no-properties (point-min)
+                                                          (point-max)))))))
+  #+END_SRC
+
+  要运行它，移动光标至函数内键入`C-M-x`，然后选择一些文本，运行`M-x print-upper-region`
+
+*** Text properties 文本属性
+
+当你在Elisp中操作文本时，可以对其应用一些属性，并且还能检索这些属性。完整的介绍见
+[[http://www.gnu.org/software/emacs/manual/html_node/elisp/Text-Properties.html#Text-Properties][手册]] 中的“Manipulating the buffer”（操纵缓冲区）小节。
+
+** 调试器
+
+运行 `M-: (setq debug-on-error t) RET` 随后任何错误都将打开调试器。
+
+#+begin_quote
+I'll write more about using the debugger stepper and breakpoints later.
+#+end_quote
+
+「作者已弃坑
+  ——译者注」
+
+** 编辑相关
+*** Paredit插件
+
+立即安装并启用 [[http://www.emacswiki.org/emacs/ParEdit][paraedit]]. 如果没有 paredit/[[https://github.com/Fuco1/smartparens][smartparens]]; 或者 evil 和 [[https://github.com/abo-abo/lispy][lispy]]. 就无法正常编写Lisp. 
+这样就不会有不成对的括号、方括号、花括号或字符串了。学会接受这些你就可以享受这种风格了。
+
+使用在文档查找小节所提到的，使用`C-h f paredit-mode RET`来查看这个模式的文档。
+
+了解以下有用的键绑定:
+
+**** 导航/移动
+
+  * `C-M-u` - 跳转至上一个节点。
+  * `)` - 重复跳转至下一个节点，直到到达父节点末尾。
+  * `C-M-f` - 跳转至结束节点。
+  * `C-M-b` - 跳转至开始节点。
+
+**** Killing 剪切
+
+  `C-k` - 剪切所有内容从当前位置到行尾，包含任何软换行的内容。同样也会剪切掉包含的字符串，
+	但是会在字符串末尾停止。
+
+**** Raising 提升
+
+  `M-r` - 替换父节点为当前节点。
+
+      (|foo) -> foo
+      (foo |bar mu) -> bar
+      (foo (bar |mu zot) bob) -> (foo mu bob)
+
+**** Wrapping 包裹
+
+  * `C-M-(` to wrap the following node in parens。
+  * 二选一, `C-M-SPC` 选择所有节点, 或者只使用你选中的区域，然后运行`(` 或
+    `[` 或 `{` 来将选择的区域扩起来。
+
+**** Splitting 分割
+
+  * `M-s` 分割当前节点，这会为表达式或字符串加上括号。
+  * `M-J` 连接两个节点，同上。
+
+** 操控缓冲区
+
+以下是最常用的:
+
+  * `(insert "foo" "bar")` - 插入文本到当前point(光标)处。
+  * `(delete-region start end)` - 删除区域间的文本。
+  * `(insert-buffer-substring-no-properties buffer start end)` - 在point(光标)之前插入指定缓冲区指定区域的文本(不带文本属性)。
+  * `(insert-file-contents <filename>)` - 在point(光标)之后插入指定文件的内容。
+
+  也可以使用Emacs Lisp调用任何其他的插入相关的命令。
+
+*** Text properties 文本属性
+
+要向缓冲区的文本添加属性，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (put-text-property start end 'my-property-name <value>)
+#+END_SRC
+
+要完全重置文本属性，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (set-text-properties start end 'my-property-name <value>)
+#+END_SRC
+
+要从文本中获取属性，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (get-text-property <point> 'my-property-name)
+#+END_SRC
+
+要在字符串被插入缓冲区之前属性化，使用：
+
+#+BEGIN_SRC emacs-lisp
+  (propertize "hello" 'my-property-name <value> 'another-prop <value2>)
+#+END_SRC
+
+** 缓冲区中移动
+
+以下是最常用的函数:
+
+  * `(goto-char <point>)` - 跳转至指定的point位置。
+  * `(forward-char n)` - 向前移动n个字符. 允许接收一个前缀参量。
+  * `(end-of-line)` - 移动point到当前行行尾。
+  * `(beginning-of-line)` - 移动point到当前行行首。
+  * `(skip-chars-forward "regex string")` - 跳转至给定正则表达式所匹配字符的前面。
+  * `(skip-chars-backward "regex string")` - 跳转至给定正则表达式所匹配字符的前面。
+  * `(search-forward "foo")` - 从前开始查找字符串foo，找到后，移动光标到foo的位置。
+  * `(search-backward "foo")` - 从后开始查找字符串foo，找到后，移动光标到foo的位置。
+  * `(search-forward-regexp "blah")` - 同上, 但参数是正则表达式。
+  * `(search-backward-regexp "blah")` - 同上, 但参数是正则表达式。
+  如果你想使用一种在buffer中移动光标的函数，但是却不知道其函数名称的话，可以使用`C-h k`查询到键入的按键所对应的函数。
+
+*** Save excursion(保存光标状态)
+
+你常常会想执行查询或操纵的操作后将光标返回原本的位置，那么你就可以使用:
+
+#+BEGIN_SRC emacs-lisp
+  (save-excursion ...)
+#+END_SRC
+
+例如:
+
+#+BEGIN_SRC emacs-lisp
+  (save-excursion (beginning-of-line) (looking-at "X"))
+#+END_SRC
+
+将返回当前行首是否以`X`开头。
+
+类似的函数还有 `save-window-excursion`.
+** 缓冲区中查询
+
+  * `(buffer-substring start end)` - 获取当前buffer中start到end之间的字符串, 并且这些字符串包含了原有的文本属性。
+  * `(buffer-substring-no-properties start end)` - 获取当前buffer中start到end之间的字符串, 不包含文本属性。
+  * `(buffer-string)` - 以字符串形式返回当前buffer的内容。
+  * `(looking-at "[a-zA-Z]+")` - point(光标)后的字符跟参量中的正则表达式匹配么？
+  * `(looking-back "[a-zA-Z]+")` - point(光标)前的字符跟参量中的正则表达式匹配么？
+
+** 临时缓冲区
+
+在临时缓冲区中做一些事很有用，你可以使用简单的Elisp代码来生成字符串和一些属性，例如:
+
+#+BEGIN_SRC emacs-lisp
+  (with-temp-buffer
+    (insert "Hello!"))
+#+END_SRC
+
+** interactive 定义交互式函数
+
+为了能让函数能被你的快捷键调用，函数需要是交互式的，
+你需要添加`(interactive)`语句到`defun`语句中：
+
+#+BEGIN_SRC emacs-lisp
+  (defun foo ()
+    "函数文档."
+    (interactive)
+    (do-some-stuff))
+#+END_SRC
+
+可以从手册中了解一堆关于 `INTERACTIVE` 的特殊变量, [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Using-Interactive.html][see the manual]].
+
+此时，你的函数`foo`是交互式的了，你可以为其绑定键：
+
+#+BEGIN_SRC emacs-lisp
+  (define-key emacs-lisp-mode (kbd "C-c C-f") 'foo)
+#+END_SRC
+
+** 创建一个major mode(主模式)
+
+通常使用`define-derived-mode`。 见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Derived-Modes.html][the manual on this.]]
+
+例子:
+
+#+BEGIN_SRC emacs-lisp
+  (define-derived-mode hypertext-mode
+    text-mode "Hypertext"
+    "Major mode for hypertext.
+   \\{hypertext-mode-map}"
+    (setq case-fold-search nil))
+
+  (define-key hypertext-mode-map
+    [down-mouse-3] 'do-hyper-link)
+#+END_SRC
+
+** 创建一个minor mode(子模式)
+
+子模式用于增强已有的主模式。见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Minor-Modes.html][the manual]] 关于
+`define-minor-mode`.
+
+测试用例:
+
+#+BEGIN_SRC emacs-lisp
+  (defvar elisp-guide-mode-map (make-sparse-keymap))
+  (define-minor-mode elisp-guide-mode "A simple minor mode example."
+    :lighter " ELGuide"
+    :keymap elisp-guide-mode-map
+    (if (bound-and-true-p elisp-guide-mode)
+        (message "Elisp guide activated!")
+      (message "Bye!")))
+  (define-key elisp-guide-mode-map (kbd "C-c C-a") 'elisp-guide-go)
+  (defun elisp-guide-go ()
+    (interactive)
+    (message "Go!"))
+#+END_SRC
+
+执行 `M-x elisp-guide-mode` 以激活它 ， 再次运行以关闭它。
+
+实例:
+
+  * [[https://github.com/chrisdone/structured-haskell-mode/blob/master/elisp/shm.el#L110][structured-haskell-mode]]
+  * [[https://github.com/emacsmirror/paredit/blob/master/paredit.el#L203][paredit-mode]]
+  * [[https://github.com/chrisdone/god-mode/blob/master/god-mode.el#L80..L86][god-mode]]
+
+** marker 标记
+
+标记可以很方便的存储point(光标)位置， 随着更改缓冲区的操作，标记也会变化。
+见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Markers.html][the manual]], 手册里很好的解释了标记是什么， 手册中的例子相比本教程更加具
+有过渡性，所以作者的教程仅会稍稍涉及。
+
+例子:
+
+#+BEGIN_SRC emacs-lisp
+  (defun my-indent-region (beg end)
+    (interactive "r")
+    (let ((marker (make-marker)))
+      (set-marker marker (region-end))
+      (goto-char (region-beginning))
+      (while (< (point) marker)
+        (funcall indent-line-function)
+        (forward-line 1))))
+#+END_SRC
+
+在你开始更改缓冲区之前，你需要存储选中区域的结尾，在你开始为当前行缩进时，
+整数位置将会增加。所以你将其存储到marker中，然后在每次缓冲区的内容发生变化
+时，marker的值都会更新。
+** overlays 覆盖层
+
+见 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Overlays.html][手册中的overlays]], 对于特殊的文本来说，这是一个很方便的工具，它看起来像独立于缓
+冲区之上的文本。这有些高级，当你想要使用覆盖层时，你将会乐意阅读文档中关于它的条目。
+
+** Elisp中的约定
+*** 命名空间
+
+Emacs Lisp 不支持模块化。我们可以照葫芦画瓢，如果你的模块名叫做`foo`，
+那么你可以在你的所有顶级绑定名加上前缀`foo-`，例如：
+
+#+begin_src emacs-lisp
+(defun foo-go ()
+      "Go!"
+       ...)
+(provide 'foo)
+#+end_src    
+
+使用以下工具，可以让你少打些字：
+
+#+BEGIN_SRC emacs-lisp
+  (defun emacs-lisp-expand-clever ()
+    "Cleverly expand symbols with normal dabbrev-expand, but also
+  if the symbol is -foo, then expand to module-name-foo."
+    (interactive)
+    (if (save-excursion
+          (backward-sexp)
+          (when (looking-at "#?'") (search-forward "'"))
+          (looking-at "-"))
+        (if (eq last-command this-command)
+            (call-interactively 'dabbrev-expand)
+          (let ((module-name (emacs-lisp-module-name)))
+            (progn
+              (save-excursion
+                (backward-sexp)
+                (when (looking-at "#?'") (search-forward "'"))
+                (unless (string= (buffer-substring-no-properties
+                                  (point)
+                                  (min (point-max) (+ (point) (length module-name))))
+                                 module-name)
+                  (insert module-name)))
+              (call-interactively 'dabbrev-expand))))
+      (call-interactively 'dabbrev-expand)))
+
+  (defun emacs-lisp-module-name ()
+    "Search the buffer for `provide' declaration."
+    (save-excursion
+      (goto-char (point-min))
+      (when (search-forward-regexp "^(provide '" nil t 1)
+        (symbol-name (symbol-at-point)))))
+#+END_SRC
+
+然后:
+
+#+BEGIN_SRC emacs-lisp
+  (define-key emacs-lisp-mode-map (kbd "M-/") 'emacs-lisp-expand-clever)
+#+END_SRC
+
+此时你就可以编写`(defun -blah M-/` 随后可以得到`(defun foo-blah)`。你需要
+在文件末行添加`(provide 'foo)`使其正常工作。
+
+** 其他资料
+
+  * https://github.com/gar3thjon3s/elisp-cheatsheet/blob/master/cheatsheet.md
+  * http://wikemacs.org/wiki/Emacs_Lisp_Cheat_Sheet
+  * http://steve-yegge.blogspot.it/2008/01/emergency-elisp.html
+  * http://lispp.wordpress.com/2009/11/25/emacs-lisp-cheatsheet/
+  * http://stackoverflow.com/questions/5238245/elisp-programming-whats-the-best-setup
+  * http://nic.ferrier.me.uk/blog/2012_07/tips-and-tricks-for-emacslisp
+  * https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html
+  * http://www.emacswiki.org/emacs/EmacsLispIntro
+  * http://www.emacswiki.org/emacs/LearnEmacsLisp
+  * http://bzg.fr/learn-emacs-lisp-in-15-minutes.html
+  * http://www.delorie.com/gnu/docs/emacs-lisp-intro/emacs-lisp-intro_toc.html
+  * http://cjohansen.no/an-introduction-to-elisp
+  * http://emacswiki.org/emacs/ElispCookbook
