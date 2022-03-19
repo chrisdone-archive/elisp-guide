@@ -494,7 +494,7 @@ Now your function `foo` is interactive, you can use it in a
 keybinding:
 
 #+BEGIN_SRC emacs-lisp
-  (define-key emacs-lisp-mode (kbd "C-c C-f") 'foo)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-f") 'foo)
 #+END_SRC
 
 ** Defining your own major mode
