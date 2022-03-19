@@ -527,7 +527,7 @@ Now your function `foo` is interactive, you can use it in a
 keybinding:
 
 ``` lisp
-(define-key emacs-lisp-mode (kbd "C-c C-f") 'foo)
+(define-key emacs-lisp-mode-mode (kbd "C-c C-f") 'foo)
 ```
 
 ## Defining your own major mode
